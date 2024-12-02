@@ -21,7 +21,7 @@ FROM countries
 JOIN countrylanguages ON countries.code = countrylanguages.countrycode
 WHERE countries.region = 'Southern Europe' AND countries.name != 'Holy See (Vatican City State)'
 GROUP BY countries.name
-HAVING COUNT(countrylanguages.language)=1 AND MAX(countrylanguages.language)='Italian'
+HAVING COUNT(countrylanguages.language)=1 AND MAX(countrylanguages.language)='Italian';
 
 -- I used ChatGPT to help me structure the lgoic for this as I was able to independently get it to output three countries, but some of them spoke more than just Italian. I googled for a while to try to find a method, but most of what I found wasn't working, so I finally put in what I had and asked why it wasn't working and what I needed to change, causing it to give me the GROUP BY, HAVING, and COUNT/MAX portions as well as restructuring how I joined the data. It makes sense for the most part, but I don't understand how the restructured join refiend the search.
 
@@ -29,13 +29,18 @@ HAVING COUNT(countrylanguages.language)=1 AND MAX(countrylanguages.language)='It
 
 -- Write SQL query here
 
--- SELECT cities.name AS city 
--- FROM cities JOIN countries ON countries.code = cities.countrycode 
--- WHERE countries.name = 'San Marino' AND cities.name != 'San Marino';
+SELECT cities.name AS city 
+FROM cities JOIN countries ON countries.code = cities.countrycode 
+WHERE countries.name = 'San Marino' AND cities.name != 'San Marino';
 
 -- Clue #5: Oh no, she pulled a switch – there are two cities with very similar names, but in totally different parts of the globe! She's headed to South America as we speak; go find a city whose name is like the one we were headed to, but doesn't end the same. Find out the city, and do another search for what country it's in. Hurry!
 
 -- Write SQL query here
+
+SELECT cities.name AS city, countries.name AS country
+FROM cities JOIN countries ON countries.code = cities.countrycode
+WHERE cities.name LIKE 'Serra%' AND countries.continent = 'South America';
+
 
 
 -- Clue #6: We're close! Our South American agent says she just got a taxi at the airport, and is headed towards
@@ -43,6 +48,13 @@ HAVING COUNT(countrylanguages.language)=1 AND MAX(countrylanguages.language)='It
 -- follow right behind you!
 
 -- Write SQL query here
+
+
+
+SELECT cities.name 
+FROM cities
+JOIN countries on countries.capital = cities.id
+WHERE countries.name = 'Brazil';
 
 
 -- Clue #7: She knows we're on to her – her taxi dropped her off at the international airport, and she beat us to the boarding gates. We have one chance to catch her, we just have to know where she's heading and beat her to the landing dock. Lucky for us, she's getting cocky. She left us a note (below), and I'm sure she thinks she's very clever, but if we can crack it, we can finally put her where she belongs – behind bars.
@@ -55,5 +67,6 @@ HAVING COUNT(countrylanguages.language)=1 AND MAX(countrylanguages.language)='It
 --               So I'm off to add one to the population I find
 --               In a city of ninety-one thousand and now, eighty five.
 
+SELECT cities.name FROM cities WHERE population = 91084;
 
 -- We're counting on you, gumshoe. Find out where she's headed, send us the info, and we'll be sure to meet her at the gates with bells on.
